@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="theme-color" content="#10152d">
+  <meta name="description" content="Enter CHAOS ARENA, a colorful 3D multiplayer obstacle-course game.">
   <title>CHAOS ARENA — Multiplayer 3D</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -23,9 +24,25 @@
       <p>Jump. Dodge. Don't fall.<br>Be the last one standing.</p>
 
       <div class="feature-row">
-        <span>⚡ FAST ROUNDS</span>
+        <span>⚡ 8 UNIQUE MAPS</span>
         <span>🎮 FIRST PERSON</span>
         <span>👥 UP TO 8</span>
+      </div>
+
+      <div class="map-picker">
+        <label for="mapSelect">CHOOSE YOUR ARENA</label>
+        <select id="mapSelect">
+          <option value="random">🎲 Random Map</option>
+          <option value="neon-rush">🌃 Neon Rush</option>
+          <option value="candy-chaos">🍬 Candy Chaos</option>
+          <option value="sky-bridges">☁️ Sky Bridges</option>
+          <option value="lava-run">🌋 Lava Run</option>
+          <option value="ice-breaker">❄️ Ice Breaker</option>
+          <option value="jungle-bounce">🌿 Jungle Bounce</option>
+          <option value="cyber-factory">⚙️ Cyber Factory</option>
+          <option value="rainbow-gauntlet">🌈 Rainbow Gauntlet</option>
+        </select>
+        <div id="mapDescription">A surprise course every round.</div>
       </div>
 
       <button id="practiceBtn" class="primary-btn">PLAY PRACTICE <span>→</span></button>
@@ -37,7 +54,7 @@
           <input id="roomInput" maxlength="40" placeholder="Enter your friend's room code" autocomplete="off">
           <button id="joinBtn">JOIN</button>
         </div>
-        <div id="homeStatus" class="message">Create a room to invite friends, or practice solo.</div>
+        <div id="homeStatus" class="message">Choose a map, create a room, or practice solo.</div>
       </div>
     </div>
     <div class="decoration decoration-one"></div>
@@ -52,6 +69,21 @@
     </div>
     <div id="roomStatus">Connecting...</div>
     <div id="playerCount">Players: 1 / 8</div>
+
+    <label class="room-map-label" for="roomMapSelect">ROUND MAP</label>
+    <select id="roomMapSelect" class="room-map-select">
+      <option value="random">🎲 Random Map</option>
+      <option value="neon-rush">🌃 Neon Rush</option>
+      <option value="candy-chaos">🍬 Candy Chaos</option>
+      <option value="sky-bridges">☁️ Sky Bridges</option>
+      <option value="lava-run">🌋 Lava Run</option>
+      <option value="ice-breaker">❄️ Ice Breaker</option>
+      <option value="jungle-bounce">🌿 Jungle Bounce</option>
+      <option value="cyber-factory">⚙️ Cyber Factory</option>
+      <option value="rainbow-gauntlet">🌈 Rainbow Gauntlet</option>
+    </select>
+    <div id="roomMapDescription" class="map-description-small">The host chooses the next course.</div>
+
     <button id="startRoundBtn" class="secondary-btn hidden">START ROUND</button>
     <button id="leaveBtn" class="small-btn">LEAVE ROOM</button>
   </section>
