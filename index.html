@@ -1,144 +1,128 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-  <meta name="theme-color" content="#07131b">
-  <title>LAST ISLAND — 3D Survival</title>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#10152d">
+  <title>CHAOS ARENA</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<main class="app">
+  <div id="game">
+    <div id="scene"></div>
 
-  <header class="top">
-    <a class="brand" href="#">
-      <span class="logo">LI</span>
-      LAST<span class="mint">.</span>ISLAND
-      <small>3D SURVIVAL</small>
-    </a>
-    <span class="status">
-      <i id="statusDot"></i>
-      <b id="connectionStatus">READY TO CONNECT</b>
-    </span>
-  </header>
-
-  <section class="hero">
-    <p class="eyebrow">MULTIPLAYER SURVIVAL EXPEDITION</p>
-    <h1>THE ISLAND<br><span>IS YOURS TO SURVIVE.</span></h1>
-    <p>Run through the jungle. Scavenge supplies. Trust nobody too quickly.</p>
-    <div class="tags">
-      <span>🌴 3D EXPLORATION</span>
-      <span>⚔️ SURVIVAL COMBAT</span>
-      <span>🤝 ALLIANCES</span>
-    </div>
-  </section>
-
-  <div id="notice" class="notice hidden"></div>
-
-  <section id="homeScreen" class="panel">
-    <p class="eyebrow">EXPEDITION CONTROL</p>
-    <h2>Choose your landing point.</h2>
-
-    <label for="playerName">SURVIVOR NAME</label>
-    <input id="playerName" maxlength="18" placeholder="Enter your name" autocomplete="nickname">
-
-    <div class="choices">
-      <button id="createButton" class="choice">
-        <span class="big">◎</span>
-        <b>CREATE PRIVATE ROOM</b>
-        <small>Start an island with your friends</small>
-      </button>
-
-      <button id="localButton" class="choice">
-        <span class="big">⌁</span>
-        <b>3D PRACTICE MODE</b>
-        <small>Explore the island in third person</small>
-      </button>
-    </div>
-
-    <div class="join">
-      <input id="roomCode" maxlength="6" placeholder="ROOM CODE" aria-label="Room code">
-      <button id="joinButton" class="secondary">JOIN ↗</button>
-    </div>
-
-    <p class="fine">
-      Private online rooms support 2–8 players.
-      Share the six-character room code with friends.
-    </p>
-  </section>
-
-  <section id="lobbyScreen" class="panel hidden">
-    <div class="panel-head">
-      <div>
-        <p class="eyebrow">SURVIVAL SESSION</p>
-        <h2 id="lobbyTitle">Waiting for survivors</h2>
+    <header class="topbar">
+      <a class="brand" href="#" onclick="location.reload();return false;">
+        <span class="brand-icon">✦</span> CHAOS<span>ARENA</span>
+      </a>
+      <div class="online-pill">
+        <span class="dot"></span>
+        <span id="connectionStatus">OFFLINE</span>
       </div>
-      <span id="phaseBadge" class="badge">LOBBY</span>
-    </div>
+    </header>
 
-    <div class="roomcode">
-      <div>
-        <label>ROOM CODE · SHARE WITH FRIENDS</label>
-        <strong id="roomCodeDisplay">------</strong>
+    <main id="home" class="screen">
+      <div class="hero">
+        <div class="eyebrow">✦ THE FLOOR IS YOUR ENEMY ✦</div>
+        <h1>WELCOME TO<br><span>THE CHAOS.</span></h1>
+        <p>Jump. Dodge. Don't fall.<br>Be the last one standing.</p>
+
+        <div class="feature-row">
+          <span>⚡ FAST ROUNDS</span>
+          <span>🎮 FIRST PERSON</span>
+          <span>👥 UP TO 8</span>
+        </div>
+
+        <button id="practiceBtn" class="primary-btn">
+          PLAY PRACTICE <span>→</span>
+        </button>
+
+        <div class="room-box">
+          <h2>PLAY WITH FRIENDS</h2>
+          <button id="createBtn" class="secondary-btn">
+            ✦ CREATE PRIVATE ROOM
+          </button>
+          <div class="join-row">
+            <input id="roomInput" maxlength="40"
+                   placeholder="Paste host room code">
+            <button id="joinBtn">JOIN</button>
+          </div>
+          <div id="homeStatus" class="message">
+            Practice works solo. Create a room to invite friends.
+          </div>
+        </div>
       </div>
-      <button id="copyRoomButton" class="secondary">COPY</button>
+
+      <div class="hero-decoration decoration-one"></div>
+      <div class="hero-decoration decoration-two"></div>
+    </main>
+
+    <section id="roomPanel" class="room-panel hidden">
+      <div class="room-label">PRIVATE ROOM</div>
+      <div class="room-code-row">
+        <strong id="roomCode">---</strong>
+        <button id="copyBtn" class="small-btn">COPY CODE</button>
+      </div>
+      <div id="roomStatus">Connecting...</div>
+      <div id="playerCount">Players: 1 / 8</div>
+      <button id="startRoundBtn" class="secondary-btn hidden">
+        START NEW ROUND
+      </button>
+      <button id="leaveBtn" class="small-btn">LEAVE ROOM</button>
+    </section>
+
+    <section id="hud" class="hidden">
+      <div class="hud-left">
+        <div class="hud-card">
+          <small>YOUR STATUS</small>
+          <strong id="playerStatus">READY</strong>
+        </div>
+        <div class="hud-card">
+          <small>PLAYERS ALIVE</small>
+          <strong id="aliveCount">1</strong>
+        </div>
+      </div>
+      <div id="roundMessage">RUN. JUMP. SURVIVE.</div>
+      <button id="exitBtn" class="small-btn">EXIT</button>
+    </section>
+
+    <div id="crosshair" class="hidden">
+      <span></span><span></span>
     </div>
 
-    <div class="players-head">
-      <label>SURVIVORS</label>
-      <span id="playerCount">0 / 8</span>
+    <div id="mobileControls" class="hidden">
+      <div id="lookZone"></div>
+      <div class="mobile-tip">DRAG RIGHT SIDE TO LOOK</div>
+      <div class="move-pad">
+        <button data-move="forward">▲</button>
+        <div class="move-middle">
+          <button data-move="left">◀</button>
+          <button data-move="back">▼</button>
+          <button data-move="right">▶</button>
+        </div>
+      </div>
+      <button id="jumpBtn" class="jump-btn">JUMP</button>
     </div>
 
-    <div id="playerList" class="players"></div>
-
-    <div id="roleBox" class="role hidden">
-      <h3 id="roleTitle"></h3>
-      <p id="roleDescription"></p>
+    <div id="messageOverlay" class="hidden">
+      <div class="result-card">
+        <div class="result-icon">🏆</div>
+        <h2 id="resultTitle">ROUND OVER</h2>
+        <p id="resultText"></p>
+        <button id="resultBtn" class="primary-btn">PLAY AGAIN →</button>
+      </div>
     </div>
 
-    <div id="actionArea" class="actions"></div>
-    <div id="gameArea" class="game hidden"></div>
-
-    <p id="lobbyHint" class="fine">
-      Waiting for the host to launch the expedition.
-    </p>
-
-    <button id="leaveButton" class="ghost">← LEAVE SESSION</button>
-  </section>
-
-  <section class="rules">
-    <p class="eyebrow">HOW TO SURVIVE</p>
-
-    <div class="rulegrid">
-      <article>
-        <b>01 · EXPLORE</b>
-        <p>Explore a 3D island with trees, rocks, beaches, and supply drops.</p>
-      </article>
-
-      <article>
-        <b>02 · GEAR UP</b>
-        <p>Collect resources, manage hunger, craft a shield, and form alliances.</p>
-      </article>
-
-      <article>
-        <b>03 · OUTLAST THEM</b>
-        <p>Fight nearby rivals, avoid the storm, and be the last survivor.</p>
-      </article>
+    <div id="loading" class="loading">
+      <div class="loader"></div>
+      <strong>BUILDING THE ARENA</strong>
+      <small>Preparing maximum chaos...</small>
     </div>
-  </section>
+  </div>
 
-  <footer>
-    LAST ISLAND © 2026
-    <span>THE TIDE ALWAYS TURNS.</span>
-  </footer>
-
-</main>
-
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="script.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
