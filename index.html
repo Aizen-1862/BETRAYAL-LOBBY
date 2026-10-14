@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080b16">
+  <meta name="description" content="BETRAYAL LOBBY — a social deduction game of secret roles, suspicious players, and high-stakes votes.">
+  <title>BETRAYAL LOBBY | Trust Nobody</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <main class="app">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Betrayal Lobby home">
+        <span class="brand-icon">B</span>
+        <span>BETRAYAL<span class="brand-accent">.</span>LOBBY</span>
+      </a>
+      <div class="connection-pill">
+        <span class="connection-dot"></span>
+        <span id="connectionStatus">LOCAL MODE READY</span>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="eyebrow"><span></span> SOCIAL DEDUCTION PROTOCOL</div>
+      <h1>TRUST <span>NOBODY.</span></h1>
+      <p>Everyone has a secret. One of them is working against you.</p>
+    </section>
+
+    <div id="notice" class="notice hidden" role="status"></div>
+
+    <section id="homeScreen" class="panel home-panel">
+      <div class="panel-heading">
+        <div>
+          <p class="section-label">MISSION CONTROL</p>
+          <h2>Enter the lobby.</h2>
+        </div>
+        <span class="live-tag">V.01</span>
+      </div>
+
+      <label class="field-label" for="playerName">YOUR CODENAME</label>
+      <input id="playerName" class="text-input" maxlength="18"
+        placeholder="Enter your codename" autocomplete="nickname">
+
+      <div class="mode-grid">
+        <button id="localButton" class="mode-card" type="button">
+          <span class="mode-icon">⌁</span>
+          <strong>LOCAL GAME</strong>
+          <span>Pass one device between friends</span>
+          <span class="mode-action">PLAY LOCALLY ↗</span>
+        </button>
+
+        <button id="createButton" class="mode-card online-card" type="button">
+          <span class="mode-icon">◎</span>
+          <strong>CREATE ROOM</strong>
+          <span>Host an online game with a room code</span>
+          <span class="mode-action">CREATE ROOM ↗</span>
+        </button>
+      </div>
+
+      <div class="join-divider"><span>OR JOIN A ROOM</span></div>
+
+      <div class="join-row">
+        <input id="roomCode" class="text-input code-input"
+          maxlength="6" placeholder="ROOM CODE" aria-label="Room code"
+          autocapitalize="characters" autocomplete="off">
+        <button id="joinButton" class="button button-secondary" type="button">JOIN ↗</button>
+      </div>
+
+      <p class="fine-print">Online mode requires a configured Firebase project. Local mode works without internet.</p>
+    </section>
+
+    <section id="lobbyScreen" class="panel hidden">
+      <div class="panel-heading">
+        <div>
+          <p class="section-label">MULTIPLAYER SESSION</p>
+          <h2 id="lobbyTitle">Waiting for players</h2>
+        </div>
+        <span id="phaseBadge" class="phase-badge">LOBBY</span>
+      </div>
+
+      <div class="room-code-box">
+        <div>
+          <span class="field-label">ROOM CODE</span>
+          <strong id="roomCodeDisplay">------</strong>
+        </div>
+        <button id="copyRoomButton" class="button button-secondary small-button" type="button">COPY CODE</button>
+      </div>
+
+      <div class="player-heading">
+        <span class="section-label">OPERATIVES</span>
+        <span id="playerCount" class="player-count">0 PLAYERS</span>
+      </div>
+      <div id="playerList" class="player-list"></div>
+
+      <div id="roleBox" class="role-box hidden">
+        <span class="section-label">YOUR SECRET ROLE</span>
+        <h3 id="roleTitle">CLASSIFIED</h3>
+        <p id="roleDescription"></p>
+      </div>
+
+      <div id="actionArea" class="action-area"></div>
+
+      <p id="lobbyHint" class="lobby-hint">Waiting for the host to start the game.</p>
+      <button id="leaveButton" class="button button-ghost" type="button">← LEAVE SESSION</button>
+    </section>
+
+    <section class="rules-strip">
+      <div class="rules-title">
+        <span class="section-label">HOW TO PLAY</span>
+        <span class="rules-line"></span>
+      </div>
+      <div class="rules-grid">
+        <article class="rule">
+          <span class="rule-number">01</span>
+          <h3>GET YOUR ROLE</h3>
+          <p>You're crew or the hidden saboteur.</p>
+        </article>
+        <article class="rule">
+          <span class="rule-number">02</span>
+          <h3>DISCUSS</h3>
+          <p>Talk with your friends and spot suspicious behavior.</p>
+        </article>
+        <article class="rule">
+          <span class="rule-number">03</span>
+          <h3>VOTE</h3>
+          <p>Choose a suspect. The outcome changes everything.</p>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>BETRAYAL LOBBY <span class="brand-accent">©</span> 2026</span>
+      <span>TRUST IS A LIABILITY.</span>
+    </footer>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
