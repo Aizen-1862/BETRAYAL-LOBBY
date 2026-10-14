@@ -1,8 +1,9 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 :root {
   --bg: #10152d;
-  --panel: rgba(20, 27, 54, .91);
+  --panel: rgba(20, 27, 54, .94);
   --white: #fff;
   --muted: #a9b4d5;
   --cyan: #55f1f3;
@@ -25,10 +26,7 @@ html, body {
   background: var(--bg);
 }
 
-button, input {
-  font: inherit;
-}
-
+button, input { font: inherit; }
 button {
   cursor: pointer;
   color: white;
@@ -36,20 +34,11 @@ button {
   touch-action: manipulation;
 }
 
-#game {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  min-height: 100%;
-  overflow: hidden;
-  isolation: isolate;
-  background: linear-gradient(#1b3264, #4e7fc0);
-}
-
 #scene {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  z-index: -2;
+  z-index: 0;
+  background: linear-gradient(#4d8ecb, #a7ddff);
 }
 
 #scene canvas {
@@ -57,21 +46,6 @@ button {
   width: 100%;
   height: 100%;
   outline: none;
-}
-
-#game::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    rgba(7, 12, 33, .58),
-    transparent 24%,
-    transparent 65%,
-    rgba(7, 12, 33, .45)
-  );
 }
 
 .topbar {
@@ -85,32 +59,24 @@ button {
   align-items: center;
   justify-content: space-between;
   z-index: 5;
+  pointer-events: none;
 }
 
 .brand {
-  color: white;
-  text-decoration: none;
   font-size: 19px;
   font-weight: 900;
   letter-spacing: 1px;
+  text-shadow: 0 2px 12px #17213b;
 }
 
-.brand span:last-child {
-  color: var(--cyan);
-}
-
-.brand-icon {
-  color: var(--pink);
-  margin-right: 7px;
-}
-
+.brand span { color: var(--cyan); }
 .online-pill {
   display: flex;
   align-items: center;
   gap: 9px;
   padding: 9px 13px;
   border: 1px solid rgba(255,255,255,.2);
-  background: rgba(12,18,41,.62);
+  background: rgba(12,18,41,.75);
   border-radius: 30px;
   font-size: 10px;
   letter-spacing: 1px;
@@ -133,9 +99,7 @@ button {
   align-items: center;
   padding: 90px 7% 35px;
   overflow-y: auto;
-  background:
-    radial-gradient(ellipse at 75% 45%, rgba(92,99,219,.12), transparent 50%),
-    linear-gradient(90deg, rgba(9,14,35,.93), rgba(9,14,35,.72) 48%, rgba(9,14,35,.12));
+  background: linear-gradient(90deg, rgba(9,14,35,.94), rgba(9,14,35,.76) 48%, rgba(9,14,35,.12));
 }
 
 .hero {
@@ -162,7 +126,7 @@ h1 {
 
 h1 span {
   color: var(--pink);
-  text-shadow: 0 0 32px rgba(255,101,197,.18);
+  text-shadow: 0 0 32px rgba(255,101,197,.2);
 }
 
 .hero > p {
@@ -184,7 +148,6 @@ h1 span {
   border-radius: 7px;
   font-size: 9px;
   font-weight: 800;
-  letter-spacing: .6px;
   color: #dfe6ff;
   background: rgba(255,255,255,.07);
   border: 1px solid rgba(255,255,255,.1);
@@ -222,7 +185,7 @@ h1 span {
   padding: 19px;
   border: 1px solid rgba(255,255,255,.13);
   border-radius: 15px;
-  background: rgba(17,23,49,.75);
+  background: rgba(17,23,49,.82);
   backdrop-filter: blur(12px);
 }
 
@@ -234,7 +197,7 @@ h1 span {
 
 .secondary-btn {
   width: 100%;
-  background: linear-gradient(100deg, #8a62ff, #bb65f8);
+  background: linear-gradient(100deg, #7959f7, #bd65f8);
 }
 
 .join-row {
@@ -256,9 +219,7 @@ h1 span {
   font-size: 12px;
 }
 
-.join-row input:focus {
-  border-color: var(--cyan);
-}
+.join-row input:focus { border-color: var(--cyan); }
 
 .join-row button, .small-btn {
   background: rgba(255,255,255,.11);
@@ -278,11 +239,11 @@ h1 span {
   overflow-wrap: anywhere;
 }
 
-.hero-decoration {
+.decoration {
   position: absolute;
   width: 220px;
   height: 220px;
-  border: 1px solid rgba(85,241,243,.17);
+  border: 1px solid rgba(85,241,243,.2);
   border-radius: 45px;
   transform: rotate(28deg);
   right: 8%;
@@ -293,7 +254,7 @@ h1 span {
 .decoration-two {
   width: 130px;
   height: 130px;
-  border-color: rgba(255,101,197,.23);
+  border-color: rgba(255,101,197,.25);
   right: 18%;
   top: 48%;
   transform: rotate(45deg);
@@ -341,14 +302,8 @@ h1 span {
   overflow-wrap: anywhere;
 }
 
-.room-panel .secondary-btn {
-  margin-top: 10px;
-}
-
-.room-panel .small-btn {
-  min-height: 33px;
-  margin-top: 7px;
-}
+.room-panel .secondary-btn { margin-top: 10px; }
+.room-panel .small-btn { min-height: 33px; margin-top: 7px; }
 
 #hud {
   position: absolute;
@@ -363,23 +318,18 @@ h1 span {
   pointer-events: none;
 }
 
-.hud-left {
-  display: flex;
-  gap: 8px;
-}
+.hud-left { display: flex; gap: 8px; }
 
 .hud-card {
   min-width: 98px;
   padding: 12px;
   border: 1px solid rgba(255,255,255,.2);
   border-radius: 10px;
-  background: rgba(12,18,41,.75);
+  background: rgba(12,18,41,.78);
   backdrop-filter: blur(10px);
 }
 
-.hud-card small, .hud-card strong {
-  display: block;
-}
+.hud-card small, .hud-card strong { display: block; }
 
 .hud-card small {
   color: #abb8d8;
@@ -389,25 +339,20 @@ h1 span {
   margin-bottom: 5px;
 }
 
-.hud-card strong {
-  font-size: 13px;
-}
+.hud-card strong { font-size: 13px; }
 
 #roundMessage {
   text-align: center;
   padding: 12px 16px;
   border-radius: 10px;
-  background: rgba(12,18,41,.65);
+  background: rgba(12,18,41,.72);
   border: 1px solid rgba(255,255,255,.12);
   font-size: 10px;
   font-weight: 900;
   letter-spacing: 1px;
 }
 
-#exitBtn {
-  pointer-events: auto;
-  min-height: 38px;
-}
+#exitBtn { pointer-events: auto; min-height: 38px; }
 
 #crosshair {
   position: absolute;
@@ -430,9 +375,7 @@ h1 span {
   background: rgba(255,255,255,.9);
 }
 
-#crosshair span:last-child {
-  transform: rotate(90deg);
-}
+#crosshair span:last-child { transform: rotate(90deg); }
 
 #mobileControls {
   position: absolute;
@@ -455,10 +398,9 @@ h1 span {
   position: absolute;
   right: 18px;
   bottom: 160px;
-  color: rgba(255,255,255,.65);
+  color: rgba(255,255,255,.7);
   font-size: 9px;
   font-weight: 800;
-  letter-spacing: .6px;
 }
 
 .move-pad {
@@ -474,23 +416,15 @@ h1 span {
   height: 43px;
   border: 1px solid rgba(255,255,255,.25);
   border-radius: 12px;
-  background: rgba(13,20,46,.65);
+  background: rgba(13,20,46,.72);
   backdrop-filter: blur(8px);
   font-size: 17px;
   font-weight: 900;
   touch-action: none;
 }
 
-.move-pad > button {
-  display: block;
-  margin: 0 auto 5px;
-}
-
-.move-middle {
-  display: flex;
-  justify-content: space-between;
-  gap: 5px;
-}
+.move-pad > button { display: block; margin: 0 auto 5px; }
+.move-middle { display: flex; justify-content: space-between; gap: 5px; }
 
 .jump-btn {
   position: absolute;
@@ -513,7 +447,7 @@ h1 span {
   display: grid;
   place-items: center;
   padding: 20px;
-  background: rgba(5,9,27,.72);
+  background: rgba(5,9,27,.76);
   backdrop-filter: blur(9px);
 }
 
@@ -527,14 +461,8 @@ h1 span {
   box-shadow: 0 20px 90px rgba(0,0,0,.35);
 }
 
-.result-icon {
-  font-size: 45px;
-}
-
-.result-card h2 {
-  font-size: 26px;
-  margin: 13px 0 8px;
-}
+.result-icon { font-size: 45px; }
+.result-card h2 { font-size: 26px; margin: 13px 0 8px; }
 
 .result-card p {
   color: var(--muted);
@@ -543,12 +471,10 @@ h1 span {
   margin-bottom: 22px;
 }
 
-.result-card .primary-btn {
-  width: 100%;
-}
+.result-card .primary-btn { width: 100%; }
 
 .loading {
-  position: absolute;
+  position: fixed;
   z-index: 20;
   inset: 0;
   display: flex;
@@ -559,15 +485,8 @@ h1 span {
   background: #10152d;
 }
 
-.loading strong {
-  font-size: 12px;
-  letter-spacing: 2px;
-}
-
-.loading small {
-  color: var(--muted);
-  font-size: 11px;
-}
+.loading strong { font-size: 12px; letter-spacing: 2px; }
+.loading small { color: var(--muted); font-size: 11px; }
 
 .loader {
   width: 38px;
@@ -578,93 +497,30 @@ h1 span {
   animation: spin .7s linear infinite;
 }
 
-.hidden {
-  display: none !important;
-}
+.hidden { display: none !important; }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+@keyframes spin { to { transform: rotate(360deg); } }
 
 @media (max-width: 650px) {
-  .topbar {
-    height: 59px;
-    padding: 0 16px;
-  }
-
-  .brand {
-    font-size: 15px;
-  }
-
+  .topbar { height: 59px; padding: 0 16px; }
+  .brand { font-size: 15px; }
   .screen {
     align-items: flex-start;
-    padding: 84px 20px 28px;
-    background: linear-gradient(90deg, rgba(9,14,35,.91), rgba(9,14,35,.58));
+    padding: 80px 20px 24px;
+    background: linear-gradient(90deg, rgba(9,14,35,.94), rgba(9,14,35,.67));
   }
-
-  .hero {
-    margin: auto 0;
-  }
-
-  h1 {
-    font-size: clamp(43px, 12vw, 65px);
-    letter-spacing: -2.8px;
-  }
-
-  .hero > p {
-    font-size: 13px;
-  }
-
-  .room-box {
-    padding: 14px;
-    margin-top: 18px;
-  }
-
-  .hero-decoration {
-    width: 120px;
-    height: 120px;
-    right: -15px;
-    top: 24%;
-  }
-
-  .decoration-two {
-    right: 30px;
-    top: 36%;
-    width: 75px;
-    height: 75px;
-  }
-
-  #hud {
-    top: 68px;
-    left: 10px;
-    right: 10px;
-    gap: 5px;
-  }
-
-  .hud-left {
-    gap: 5px;
-  }
-
-  .hud-card {
-    min-width: 72px;
-    padding: 8px;
-  }
-
-  .hud-card small {
-    font-size: 7px;
-  }
-
-  .hud-card strong {
-    font-size: 11px;
-  }
-
-  #roundMessage {
-    max-width: 125px;
-    padding: 9px 7px;
-    font-size: 8px;
-    line-height: 1.4;
-  }
-
-  #exitBtn {
-    min-height: 33px;
-    padding: 0 8
+  .hero { margin: auto 0; }
+  h1 { font-size: clamp(43px, 12vw, 65px); letter-spacing: -2.8px; }
+  .hero > p { font-size: 13px; }
+  .room-box { padding: 14px; margin-top: 18px; }
+  .decoration { width: 120px; height: 120px; right: -15px; top: 24%; }
+  .decoration-two { right: 30px; top: 36%; width: 75px; height: 75px; }
+  #hud { top: 68px; left: 10px; right: 10px; gap: 5px; }
+  .hud-left { gap: 5px; }
+  .hud-card { min-width: 72px; padding: 8px; }
+  .hud-card small { font-size: 7px; }
+  .hud-card strong { font-size: 11px; }
+  #roundMessage { max-width: 125px; padding: 9px 7px; font-size: 8px; line-height: 1.4; }
+  #exitBtn { min-height: 33px; padding: 0 8px; }
+  .room-panel { top: 68px; left: 10px; width: 225px; padding: 12px; }
+}
