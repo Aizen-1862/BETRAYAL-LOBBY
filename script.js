@@ -17,18 +17,18 @@
   const roleBox = $("roleBox");
 
   const firebaseConfig = {
-    apiKey: "PASTE_YOUR_FIREBASE_API_KEY",
-    authDomain: "PASTE_YOUR_PROJECT_ID.firebaseapp.com",
-    databaseURL: "PASTE_YOUR_DATABASE_URL",
-    projectId: "PASTE_YOUR_PROJECT_ID",
-    appId: "PASTE_YOUR_FIREBASE_APP_ID"
+    apiKey: "AIzaSyADO25Q9Ckp5yl3eeyza7vwj2Viqa8EDtI",
+    authDomain: "betrayal-lobby-835a7.firebaseapp.com",
+    databaseURL: "https://betrayal-lobby-835a7-default-rtdb.firebaseio.com",
+    projectId: "betrayal-lobby-835a7",
+    appId: "1:79283239265:web:8e186b9f9195502ff5ad20"
   };
 
   const configReady =
-    firebaseConfig.apiKey !== "PASTE_YOUR_FIREBASE_API_KEY" &&
-    firebaseConfig.projectId !== "PASTE_YOUR_PROJECT_ID" &&
-    firebaseConfig.databaseURL !== "PASTE_YOUR_DATABASE_URL" &&
-    firebaseConfig.appId !== "PASTE_YOUR_FIREBASE_APP_ID";
+    firebaseConfig.apiKey !== "AIzaSyADO25Q9Ckp5yl3eeyza7vwj2Viqa8EDtI" &&
+    firebaseConfig.projectId !== "betrayal-lobby-835a7" &&
+    firebaseConfig.databaseURL !== "https://betrayal-lobby-835a7-default-rtdb.firebaseio.com" &&
+    firebaseConfig.appId !== "1:79283239265:web:8e186b9f9195502ff5ad20";
 
   let auth = null;
   let db = null;
