@@ -1,127 +1,102 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="theme-color" content="#10152d">
-  <title>CHAOS ARENA</title>
+  <title>CHAOS ARENA — Multiplayer 3D</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="game">
-    <div id="scene"></div>
+  <div id="scene"></div>
 
-    <header class="topbar">
-      <a class="brand" href="#" onclick="location.reload();return false;">
-        <span class="brand-icon">✦</span> CHAOS<span>ARENA</span>
-      </a>
-      <div class="online-pill">
-        <span class="dot"></span>
-        <span id="connectionStatus">OFFLINE</span>
-      </div>
-    </header>
+  <header class="topbar">
+    <div class="brand">✦ CHAOS<span>ARENA</span></div>
+    <div class="online-pill"><span class="dot"></span><span id="connectionStatus">LOADING</span></div>
+  </header>
 
-    <main id="home" class="screen">
-      <div class="hero">
-        <div class="eyebrow">✦ THE FLOOR IS YOUR ENEMY ✦</div>
-        <h1>WELCOME TO<br><span>THE CHAOS.</span></h1>
-        <p>Jump. Dodge. Don't fall.<br>Be the last one standing.</p>
+  <main id="home" class="screen">
+    <div class="hero">
+      <div class="eyebrow">✦ THE FLOOR IS YOUR ENEMY ✦</div>
+      <h1>WELCOME TO<br><span>THE CHAOS.</span></h1>
+      <p>Jump. Dodge. Don't fall.<br>Be the last one standing.</p>
 
-        <div class="feature-row">
-          <span>⚡ FAST ROUNDS</span>
-          <span>🎮 FIRST PERSON</span>
-          <span>👥 UP TO 8</span>
-        </div>
-
-        <button id="practiceBtn" class="primary-btn">
-          PLAY PRACTICE <span>→</span>
-        </button>
-
-        <div class="room-box">
-          <h2>PLAY WITH FRIENDS</h2>
-          <button id="createBtn" class="secondary-btn">
-            ✦ CREATE PRIVATE ROOM
-          </button>
-          <div class="join-row">
-            <input id="roomInput" maxlength="40"
-                   placeholder="Paste host room code">
-            <button id="joinBtn">JOIN</button>
-          </div>
-          <div id="homeStatus" class="message">
-            Practice works solo. Create a room to invite friends.
-          </div>
-        </div>
+      <div class="feature-row">
+        <span>⚡ FAST ROUNDS</span>
+        <span>🎮 FIRST PERSON</span>
+        <span>👥 UP TO 8</span>
       </div>
 
-      <div class="hero-decoration decoration-one"></div>
-      <div class="hero-decoration decoration-two"></div>
-    </main>
+      <button id="practiceBtn" class="primary-btn">PLAY PRACTICE <span>→</span></button>
 
-    <section id="roomPanel" class="room-panel hidden">
-      <div class="room-label">PRIVATE ROOM</div>
-      <div class="room-code-row">
-        <strong id="roomCode">---</strong>
-        <button id="copyBtn" class="small-btn">COPY CODE</button>
-      </div>
-      <div id="roomStatus">Connecting...</div>
-      <div id="playerCount">Players: 1 / 8</div>
-      <button id="startRoundBtn" class="secondary-btn hidden">
-        START NEW ROUND
-      </button>
-      <button id="leaveBtn" class="small-btn">LEAVE ROOM</button>
-    </section>
-
-    <section id="hud" class="hidden">
-      <div class="hud-left">
-        <div class="hud-card">
-          <small>YOUR STATUS</small>
-          <strong id="playerStatus">READY</strong>
+      <div class="room-box">
+        <h2>PLAY WITH FRIENDS</h2>
+        <button id="createBtn" class="secondary-btn">✦ CREATE PRIVATE ROOM</button>
+        <div class="join-row">
+          <input id="roomInput" maxlength="40" placeholder="Enter your friend's room code" autocomplete="off">
+          <button id="joinBtn">JOIN</button>
         </div>
-        <div class="hud-card">
-          <small>PLAYERS ALIVE</small>
-          <strong id="aliveCount">1</strong>
-        </div>
-      </div>
-      <div id="roundMessage">RUN. JUMP. SURVIVE.</div>
-      <button id="exitBtn" class="small-btn">EXIT</button>
-    </section>
-
-    <div id="crosshair" class="hidden">
-      <span></span><span></span>
-    </div>
-
-    <div id="mobileControls" class="hidden">
-      <div id="lookZone"></div>
-      <div class="mobile-tip">DRAG RIGHT SIDE TO LOOK</div>
-      <div class="move-pad">
-        <button data-move="forward">▲</button>
-        <div class="move-middle">
-          <button data-move="left">◀</button>
-          <button data-move="back">▼</button>
-          <button data-move="right">▶</button>
-        </div>
-      </div>
-      <button id="jumpBtn" class="jump-btn">JUMP</button>
-    </div>
-
-    <div id="messageOverlay" class="hidden">
-      <div class="result-card">
-        <div class="result-icon">🏆</div>
-        <h2 id="resultTitle">ROUND OVER</h2>
-        <p id="resultText"></p>
-        <button id="resultBtn" class="primary-btn">PLAY AGAIN →</button>
+        <div id="homeStatus" class="message">Create a room to invite friends, or practice solo.</div>
       </div>
     </div>
+    <div class="decoration decoration-one"></div>
+    <div class="decoration decoration-two"></div>
+  </main>
 
-    <div id="loading" class="loading">
-      <div class="loader"></div>
-      <strong>BUILDING THE ARENA</strong>
-      <small>Preparing maximum chaos...</small>
+  <section id="roomPanel" class="room-panel hidden">
+    <div class="room-label">PRIVATE ROOM</div>
+    <div class="room-code-row">
+      <strong id="roomCode">---</strong>
+      <button id="copyBtn" class="small-btn">COPY CODE</button>
+    </div>
+    <div id="roomStatus">Connecting...</div>
+    <div id="playerCount">Players: 1 / 8</div>
+    <button id="startRoundBtn" class="secondary-btn hidden">START ROUND</button>
+    <button id="leaveBtn" class="small-btn">LEAVE ROOM</button>
+  </section>
+
+  <section id="hud" class="hidden">
+    <div class="hud-left">
+      <div class="hud-card"><small>YOUR STATUS</small><strong id="playerStatus">READY</strong></div>
+      <div class="hud-card"><small>PLAYERS ALIVE</small><strong id="aliveCount">1</strong></div>
+    </div>
+    <div id="roundMessage">RUN. JUMP. SURVIVE.</div>
+    <button id="exitBtn" class="small-btn">EXIT</button>
+  </section>
+
+  <div id="crosshair" class="hidden"><span></span><span></span></div>
+
+  <div id="mobileControls" class="hidden">
+    <div id="lookZone"></div>
+    <div class="mobile-tip">DRAG HERE TO LOOK</div>
+    <div class="move-pad">
+      <button data-move="forward">▲</button>
+      <div class="move-middle">
+        <button data-move="left">◀</button>
+        <button data-move="back">▼</button>
+        <button data-move="right">▶</button>
+      </div>
+    </div>
+    <button id="jumpBtn" class="jump-btn">JUMP</button>
+  </div>
+
+  <div id="messageOverlay" class="hidden">
+    <div class="result-card">
+      <div class="result-icon">🏆</div>
+      <h2 id="resultTitle">ROUND OVER</h2>
+      <p id="resultText"></p>
+      <button id="resultBtn" class="primary-btn">PLAY AGAIN →</button>
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <div id="loading" class="loading">
+    <div class="loader"></div>
+    <strong>BUILDING THE ARENA</strong>
+    <small>Preparing maximum chaos...</small>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js"></script>
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <script src="script.js"></script>
 </body>
