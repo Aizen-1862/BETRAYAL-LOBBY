@@ -1,6 +1,6 @@
 
 /* ==========================================================
-   BETRAYAL LOBBY — GAME ENGINE
+   BETRAYAL LOBBY — COMPLETE GAME ENGINE
    Local pass-and-play + Firebase online multiplayer
    ========================================================== */
 
@@ -16,6 +16,7 @@
   const playerList = $("playerList");
   const roleBox = $("roleBox");
 
+  // YOUR FIREBASE WEB CONFIGURATION
   const firebaseConfig = {
     apiKey: "AIzaSyADO25Q9Ckp5yl3eeyza7vwj2Viqa8EDtI",
     authDomain: "betrayal-lobby-835a7.firebaseapp.com",
@@ -24,11 +25,21 @@
     appId: "1:79283239265:web:8e186b9f9195502ff5ad20"
   };
 
-  const configReady =
-    firebaseConfig.apiKey !== "AIzaSyADO25Q9Ckp5yl3eeyza7vwj2Viqa8EDtI" &&
-    firebaseConfig.projectId !== "betrayal-lobby-835a7" &&
-    firebaseConfig.databaseURL !== "https://betrayal-lobby-835a7-default-rtdb.firebaseio.com" &&
-    firebaseConfig.appId !== "1:79283239265:web:8e186b9f9195502ff5ad20";
+  // FIXED: Check for missing placeholders, not equality
+  // against your actual Firebase values.
+  const configReady = Boolean(
+    firebaseConfig.apiKey &&
+    firebaseConfig.authDomain &&
+    firebaseConfig.databaseURL &&
+    firebaseConfig.projectId &&
+    firebaseConfig.appId &&
+    !Object.values(firebaseConfig).some(
+      (value) =>
+        typeof value !== "string" ||
+        !value.trim() ||
+        value.startsWith("PASTE_YOUR_")
+    )
+  );
 
   let auth = null;
   let db = null;
@@ -61,17 +72,23 @@
   }
 
   function showNotice(message, isError = false) {
+    if (!notice) return;
+
     notice.textContent = message;
     notice.classList.remove("hidden", "error");
-    if (isError) notice.classList.add("error");
+
+    if (isError) {
+      notice.classList.add("error");
+    }
   }
 
   function hideNotice() {
-    notice.classList.add("hidden");
+    if (notice) notice.classList.add("hidden");
   }
 
   function setBusy(busy) {
     working = busy;
+
     [
       "localButton",
       "createButton",
@@ -85,45 +102,73 @@
   }
 
   function playerName() {
-    const name = $("playerName").value.trim().slice(0, 18);
+    const input = $("playerName");
+    const name = input ? input.value.trim().slice(0, 18) : "";
     return name || "Operative";
   }
 
   function setScreen(screen) {
-    homeScreen.classList.toggle("hidden", screen !== "home");
-    lobbyScreen.classList.toggle("hidden", screen !== "lobby");
+    if (homeScreen) {
+      homeScreen.classList.toggle("hidden", screen !== "home");
+    }
+
+    if (lobbyScreen) {
+      lobbyScreen.classList.toggle("hidden", screen !== "lobby");
+    }
   }
 
   function setConnection(text, online = false) {
-    $("connectionStatus").textContent = text;
+    const status = $("connectionStatus");
     const dot = document.querySelector(".connection-dot");
-    dot.style.background = online ? "#69efb0" : "#a58bff";
-    dot.style.boxShadow = online
-      ? "0 0 9px #69efb0"
-      : "0 0 9px #a58bff";
+
+    if (status) status.textContent = text;
+
+    if (dot) {
+      dot.style.background = online ? "#69efb0" : "#a58bff";
+      dot.style.boxShadow = online
+        ? "0 0 9px #69efb0"
+        : "0 0 9px #a58bff";
+    }
   }
 
   function showRole(role) {
     myRole = role;
+
     if (!role) {
-      roleBox.classList.add("hidden");
+      if (roleBox) roleBox.classList.add("hidden");
       return;
     }
+
+    if (!roleBox) return;
 
     roleBox.classList.remove("hidden");
 
     const isTraitor = role === "saboteur";
-    $("roleTitle").textContent = isTraitor ? "SABOTEUR" : "CREW MEMBER";
-    $("roleTitle").style.color = isTraitor ? "#ff6585" : "#5cf2e8";
-    $("roleDescription").textContent = isTraitor
-      ? "Your objective: survive the vote. Blend in, cast suspicion elsewhere, and avoid being eliminated."
-      : "Your objective: identify the saboteur. Watch the discussion, compare suspicions, and vote carefully.";
+    const title = $("roleTitle");
+    const description = $("roleDescription");
+
+    if (title) {
+      title.textContent = isTraitor ? "SABOTEUR" : "CREW MEMBER";
+      title.style.color = isTraitor ? "#ff6585" : "#5cf2e8";
+    }
+
+    if (description) {
+      description.textContent = isTraitor
+        ? "Your objective: survive the vote. Blend in, cast suspicion elsewhere, and avoid being eliminated."
+        : "Your objective: identify the saboteur. Watch the discussion, compare suspicions, and vote carefully.";
+    }
   }
 
   function renderPlayers(players, hostUid) {
     const entries = Object.entries(players || {});
-    $("playerCount").textContent =
-      entries.length + (entries.length === 1 ? " PLAYER" : " PLAYERS");
+    const count = $("playerCount");
+
+    if (count) {
+      count.textContent =
+        entries.length + (entries.length === 1 ? " PLAYER" : " PLAYERS");
+    }
+
+    if (!playerList) return;
 
     if (!entries.length) {
       playerList.innerHTML =
@@ -153,8 +198,11 @@
 
   function clearSubscriptions() {
     subscriptions.forEach((unsubscribe) => {
-      try { unsubscribe(); } catch (_) {}
+      try {
+        unsubscribe();
+      } catch (_) {}
     });
+
     subscriptions = [];
 
     if (roomRef) {
@@ -176,9 +224,29 @@
   }
 
   function requireFirebase() {
-    if (!configReady || !window.firebase) {
+    if (!configReady) {
       showNotice(
-        "Online mode is not configured yet. Complete the Firebase setup first. Local mode works without it.",
+        "Firebase configuration is incomplete. Check firebaseConfig in script.js.",
+        true
+      );
+      return false;
+    }
+
+    if (!window.firebase) {
+      showNotice(
+        "Firebase SDK did not load. Check your internet connection and Firebase script tags in index.html.",
+        true
+      );
+      return false;
+    }
+
+    if (
+      typeof window.firebase.initializeApp !== "function" ||
+      typeof window.firebase.auth !== "function" ||
+      typeof window.firebase.database !== "function"
+    ) {
+      showNotice(
+        "Firebase SDK is missing a required module. Check the Firebase scripts in index.html.",
         true
       );
       return false;
@@ -206,53 +274,97 @@
       setConnection("ONLINE READY", true);
       return true;
     } catch (error) {
-      console.error(error);
-      showNotice(
-        "Firebase connection failed. Check your project settings, anonymous sign-in, and database rules.",
-        true
-      );
+      console.error("Firebase initialization error:", error);
+
+      const code = error && error.code ? error.code : "";
+
+      if (code.includes("auth/operation-not-allowed")) {
+        showNotice(
+          "Anonymous sign-in is disabled. Enable Authentication → Sign-in method → Anonymous in Firebase.",
+          true
+        );
+      } else if (code.includes("auth/network-request-failed")) {
+        showNotice(
+          "Firebase network connection failed. Check your internet connection and reload.",
+          true
+        );
+      } else {
+        showNotice(
+          "Firebase connection failed. Check the Firebase configuration, Anonymous Authentication, and browser console.",
+          true
+        );
+      }
+
       return false;
     }
   }
 
   async function createOnlineRoom() {
     if (working) return;
+
     setBusy(true);
 
     try {
       if (!(await initializeFirebase())) return;
 
       mode = "online";
+
       const uid = currentUser.uid;
-      roomCode = generateRoomCode();
-      roomRef = db.ref("rooms/" + roomCode);
+      let created = false;
 
-      const initialData = {
-        public: {
-          hostUid: uid,
-          phase: "lobby",
-          createdAt: Date.now(),
-          message: "Waiting for players"
-        },
-        players: {
-          [uid]: {
-            name: playerName(),
-            alive: true,
-            joinedAt: Date.now()
+      // Try a few codes in case a room code already exists.
+      for (let attempt = 0; attempt < 5; attempt++) {
+        const candidate = generateRoomCode();
+        const candidateRef = db.ref("rooms/" + candidate);
+
+        const initialData = {
+          public: {
+            hostUid: uid,
+            phase: "lobby",
+            createdAt: Date.now(),
+            message: "Waiting for players"
+          },
+          players: {
+            [uid]: {
+              name: playerName(),
+              alive: true,
+              joinedAt: Date.now()
+            }
           }
-        }
-      };
+        };
 
-      await roomRef.set(initialData);
+        const result = await candidateRef.transaction((current) => {
+          if (current === null) return initialData;
+          return;
+        });
+
+        if (result.committed) {
+          roomCode = candidate;
+          roomRef = candidateRef;
+          created = true;
+          break;
+        }
+      }
+
+      if (!created) {
+        showNotice("Couldn't create a unique room code. Please try again.", true);
+        return;
+      }
+
       attachRoomListeners();
 
-      $("roomCodeDisplay").textContent = roomCode;
+      const display = $("roomCodeDisplay");
+      if (display) display.textContent = roomCode;
+
       setScreen("lobby");
       showNotice("Room created! Share the code with your friends.");
       renderOnline();
     } catch (error) {
-      console.error(error);
-      showNotice("Could not create the room. Check your database rules and try again.", true);
+      console.error("Create room error:", error);
+      showNotice(
+        "Could not create the room. Check Firebase Database Rules and try again.",
+        true
+      );
       clearSubscriptions();
     } finally {
       setBusy(false);
@@ -261,12 +373,16 @@
 
   async function joinOnlineRoom() {
     if (working) return;
+
     setBusy(true);
 
     try {
       if (!(await initializeFirebase())) return;
 
-      const requestedCode = $("roomCode").value.trim().toUpperCase();
+      const input = $("roomCode");
+      const requestedCode = input
+        ? input.value.trim().toUpperCase()
+        : "";
 
       if (!/^[A-Z0-9]{6}$/.test(requestedCode)) {
         showNotice("Enter a valid six-character room code.", true);
@@ -284,21 +400,36 @@
       const publicData = snapshot.val();
 
       if (publicData.phase !== "lobby") {
-        showNotice("That game has already started. Join a room waiting for players.", true);
+        showNotice(
+          "That game has already started. Join a room waiting for players.",
+          true
+        );
         return;
       }
 
       const playersSnapshot = await ref.child("players").get();
       const players = playersSnapshot.val() || {};
 
+      if (players[currentUser.uid]) {
+        mode = "online";
+        roomCode = requestedCode;
+        roomRef = ref;
+
+        attachRoomListeners();
+
+        const display = $("roomCodeDisplay");
+        if (display) display.textContent = roomCode;
+
+        setScreen("lobby");
+        showNotice("You're already in this room.");
+        renderOnline();
+        return;
+      }
+
       if (Object.keys(players).length >= 10) {
         showNotice("This room is full. The maximum is 10 players.", true);
         return;
       }
-
-      mode = "online";
-      roomCode = requestedCode;
-      roomRef = ref;
 
       await ref.child("players/" + currentUser.uid).set({
         name: playerName(),
@@ -306,15 +437,34 @@
         joinedAt: Date.now()
       });
 
+      mode = "online";
+      roomCode = requestedCode;
+      roomRef = ref;
+
       attachRoomListeners();
-      $("roomCodeDisplay").textContent = roomCode;
+
+      const display = $("roomCodeDisplay");
+      if (display) display.textContent = roomCode;
+
       setScreen("lobby");
       showNotice("Joined room " + roomCode + ".");
       renderOnline();
     } catch (error) {
-      console.error(error);
-      showNotice("Couldn't join. Check your connection and database rules.", true);
-      clearSubscriptions();
+      console.error("Join room error:", error);
+
+      const code = error && error.code ? error.code : "";
+
+      if (code.includes("PERMISSION_DENIED")) {
+        showNotice(
+          "Firebase denied access. Check the Realtime Database Rules.",
+          true
+        );
+      } else {
+        showNotice(
+          "Couldn't join. Check your connection, room code, and Database Rules.",
+          true
+        );
+      }
     } finally {
       setBusy(false);
     }
@@ -332,7 +482,9 @@
 
     const publicCallback = publicRef.on("value", (snapshot) => {
       publicState = snapshot.val();
+
       if (!publicState) return;
+
       renderOnline();
     });
 
@@ -369,7 +521,9 @@
   }
 
   function alivePlayers() {
-    return Object.entries(onlinePlayers).filter(([, player]) => player.alive !== false);
+    return Object.entries(onlinePlayers).filter(
+      ([, player]) => player.alive !== false
+    );
   }
 
   function onlineActionButton(label, action, primary = true) {
@@ -379,10 +533,23 @@
   function renderOnline() {
     if (mode !== "online" || !publicState) return;
 
-    $("roomCodeDisplay").textContent = roomCode;
-    $("phaseBadge").textContent = String(publicState.phase || "lobby").toUpperCase();
-    $("lobbyTitle").textContent =
-      publicState.phase === "lobby" ? "Waiting for players" : "The game is on";
+    const display = $("roomCodeDisplay");
+    const badge = $("phaseBadge");
+    const title = $("lobbyTitle");
+    const hint = $("lobbyHint");
+
+    if (display) display.textContent = roomCode;
+
+    if (badge) {
+      badge.textContent = String(publicState.phase || "lobby").toUpperCase();
+    }
+
+    if (title) {
+      title.textContent =
+        publicState.phase === "lobby"
+          ? "Waiting for players"
+          : "The game is on";
+    }
 
     renderPlayers(onlinePlayers, publicState.hostUid);
     showRole(myRole);
@@ -393,49 +560,76 @@
 
     if (!me) {
       actionArea.innerHTML = "";
-      $("lobbyHint").textContent = "Your player entry is missing. Leave and rejoin.";
+      if (hint) {
+        hint.textContent = "Your player entry is missing. Leave and rejoin.";
+      }
       return;
     }
 
     if (me.alive === false) {
       actionArea.innerHTML = "";
-      $("lobbyHint").textContent = "You've been eliminated. You can watch the rest of this game.";
+      if (hint) {
+        hint.textContent =
+          "You've been eliminated. You can watch the rest of this game.";
+      }
       return;
     }
 
     if (phase === "lobby") {
       roleBox.classList.add("hidden");
+
       actionArea.innerHTML = host
         ? onlineActionButton("START GAME", "start-online") +
           '<p class="action-title">At least 3 players are required.</p>'
         : "";
-      $("lobbyHint").textContent = host
-        ? "Share the room code. Start when everyone has joined."
-        : "Waiting for the host to start the game.";
+
+      if (hint) {
+        hint.textContent = host
+          ? "Share the room code. Start when everyone has joined."
+          : "Waiting for the host to start the game.";
+      }
     } else if (phase === "discussion") {
       actionArea.innerHTML = host
         ? onlineActionButton("START VOTING", "vote-phase")
         : "";
-      $("lobbyHint").textContent = "Discuss who seems suspicious. The host starts the vote when ready.";
+
+      if (hint) {
+        hint.textContent =
+          "Discuss who seems suspicious. The host starts the vote when ready.";
+      }
     } else if (phase === "voting") {
-      actionArea.innerHTML = renderVoteOptions(alivePlayers(), currentUser.uid, myVote);
-      $("lobbyHint").textContent = myVote
-        ? "Your vote is submitted. You cannot change it."
-        : "Choose one living player to vote for.";
+      actionArea.innerHTML = renderVoteOptions(
+        alivePlayers(),
+        currentUser.uid,
+        myVote
+      );
+
+      if (hint) {
+        hint.textContent = myVote
+          ? "Your vote is submitted. You cannot change it."
+          : "Choose one living player to vote for.";
+      }
+
       if (host) {
-        actionArea.innerHTML += onlineActionButton("RESOLVE VOTES", "resolve-votes", false);
+        actionArea.innerHTML += onlineActionButton(
+          "RESOLVE VOTES",
+          "resolve-votes",
+          false
+        );
       }
     } else if (phase === "results") {
       actionArea.innerHTML = host
         ? onlineActionButton("NEXT VOTE", "next-vote") +
           onlineActionButton("END GAME", "end-game", false)
         : "";
-      $("lobbyHint").textContent = publicState.message || "Vote resolved.";
+
+      if (hint) hint.textContent = publicState.message || "Vote resolved.";
     } else if (phase === "finished") {
       actionArea.innerHTML = host
         ? onlineActionButton("RETURN TO LOBBY", "reset-game")
         : "";
-      $("lobbyHint").textContent = publicState.message || "Game over.";
+
+      if (hint) hint.textContent = publicState.message || "Game over.";
     }
   }
 
@@ -471,7 +665,9 @@
 
     try {
       const roleMap = {};
-      const shuffled = entries.map(([uid]) => uid).sort(() => Math.random() - 0.5);
+      const shuffled = entries
+        .map(([uid]) => uid)
+        .sort(() => Math.random() - 0.5);
 
       shuffled.forEach((uid, index) => {
         roleMap[uid] = index === 0 ? "saboteur" : "crew";
@@ -480,6 +676,7 @@
       hostRoleMap = roleMap;
 
       const updates = {};
+
       for (const [uid, role] of Object.entries(roleMap)) {
         updates["roles/" + uid] = role;
       }
@@ -491,8 +688,8 @@
       await roomRef.update(updates);
       showNotice("Roles assigned. Check your secret role!");
     } catch (error) {
-      console.error(error);
-      showNotice("Couldn't start the game. Check your database rules.", true);
+      console.error("Start game error:", error);
+      showNotice("Couldn't start the game. Check your Database Rules.", true);
     }
   }
 
@@ -501,13 +698,14 @@
 
     try {
       await roomRef.child("votes").remove();
+
       await roomRef.child("public").update({
         phase: "voting",
         message: "Voting is open."
       });
     } catch (error) {
-      console.error(error);
-      showNotice("Couldn't open voting.", true);
+      console.error("Start voting error:", error);
+      showNotice("Couldn't open voting. Check your Database Rules.", true);
     }
   }
 
@@ -527,8 +725,8 @@
       await roomRef.child("votes/" + currentUser.uid).set(targetUid);
       showNotice("Vote submitted.");
     } catch (error) {
-      console.error(error);
-      showNotice("Vote failed. Check your connection.", true);
+      console.error("Cast vote error:", error);
+      showNotice("Vote failed. Check your connection and Database Rules.", true);
     }
   }
 
@@ -539,6 +737,7 @@
       const votesSnapshot = await roomRef.child("votes").get();
       const votes = votesSnapshot.val() || {};
       const voters = alivePlayers().map(([uid]) => uid);
+
       const validVotes = Object.entries(votes).filter(([voter, target]) =>
         voters.includes(voter) &&
         voters.includes(target) &&
@@ -546,33 +745,55 @@
       );
 
       if (validVotes.length < voters.length) {
-        showNotice("Not everyone has voted yet. You can resolve the vote anyway.", true);
+        showNotice(
+          "Not everyone has voted yet. You can resolve the vote anyway.",
+          true
+        );
       }
 
       const tally = {};
+
       validVotes.forEach(([, target]) => {
         tally[target] = (tally[target] || 0) + 1;
       });
 
       const maxVotes = Math.max(0, ...Object.values(tally));
-      const leaders = Object.keys(tally).filter((uid) => tally[uid] === maxVotes);
-      const eliminatedUid = maxVotes > 0 && leaders.length === 1 ? leaders[0] : null;
+      const leaders = Object.keys(tally).filter(
+        (uid) => tally[uid] === maxVotes
+      );
+
+      const eliminatedUid =
+        maxVotes > 0 && leaders.length === 1 ? leaders[0] : null;
 
       let message = "It's a tie. Nobody was eliminated.";
+
       if (eliminatedUid) {
-        const eliminatedName = onlinePlayers[eliminatedUid]?.name || "A player";
+        const eliminatedName =
+          onlinePlayers[eliminatedUid]?.name || "A player";
+
         message = eliminatedName + " was eliminated.";
-        await roomRef.child("players/" + eliminatedUid + "/alive").set(false);
+
+        await roomRef
+          .child("players/" + eliminatedUid + "/alive")
+          .set(false);
       }
 
-      // Host reads role data to determine the outcome.
+      // NOTE: In this prototype, the host can read the role map.
       const rolesSnapshot = await roomRef.child("roles").get();
       const roles = rolesSnapshot.val() || {};
-      const survivors = alivePlayers().filter(([uid]) => uid !== eliminatedUid);
-      const saboteurs = survivors.filter(([uid]) => roles[uid] === "saboteur").length;
+
+      const survivors = alivePlayers().filter(
+        ([uid]) => uid !== eliminatedUid
+      );
+
+      const saboteurs = survivors.filter(
+        ([uid]) => roles[uid] === "saboteur"
+      ).length;
+
       const crew = survivors.length - saboteurs;
 
       let phase = "results";
+
       if (eliminatedUid && roles[eliminatedUid] === "saboteur") {
         phase = "finished";
         message += " The saboteur was caught. CREW WINS!";
@@ -589,8 +810,8 @@
 
       showNotice(message);
     } catch (error) {
-      console.error(error);
-      showNotice("Couldn't resolve votes. Check the database rules.", true);
+      console.error("Resolve votes error:", error);
+      showNotice("Couldn't resolve votes. Check the Database Rules.", true);
     }
   }
 
@@ -599,22 +820,29 @@
 
     try {
       await roomRef.child("votes").remove();
+
       await roomRef.child("public").update({
         phase: "discussion",
         message: "Discuss again, then vote."
       });
     } catch (error) {
-      console.error(error);
+      console.error("Next vote error:", error);
       showNotice("Couldn't start the next round.", true);
     }
   }
 
   async function endOnlineGame() {
     if (!isHost()) return;
-    await roomRef.child("public").update({
-      phase: "finished",
-      message: "The host ended the game."
-    });
+
+    try {
+      await roomRef.child("public").update({
+        phase: "finished",
+        message: "The host ended the game."
+      });
+    } catch (error) {
+      console.error("End game error:", error);
+      showNotice("Couldn't end the game.", true);
+    }
   }
 
   async function resetOnlineGame() {
@@ -622,11 +850,13 @@
 
     try {
       const players = onlinePlayers;
+
       const updates = {
         "public/phase": "lobby",
         "public/message": "Waiting for players",
-        "votes": null,
-        "roles": null
+        votes: null,
+        roles: null,
+        "public/lastEliminated": ""
       };
 
       Object.keys(players).forEach((uid) => {
@@ -634,14 +864,16 @@
       });
 
       await roomRef.update(updates);
+
       hostRoleMap = {};
       myRole = null;
       myVote = "";
+
       showRole(null);
       showNotice("Room reset. Invite your friends for another game.");
     } catch (error) {
-      console.error(error);
-      showNotice("Couldn't reset the room.", true);
+      console.error("Reset game error:", error);
+      showNotice("Couldn't reset the room. Check your Database Rules.", true);
     }
   }
 
@@ -654,7 +886,8 @@
 
     if (!namesInput) return;
 
-    const names = namesInput.split(",")
+    const names = namesInput
+      .split(",")
       .map((name) => name.trim().slice(0, 18))
       .filter(Boolean)
       .slice(0, 10);
@@ -664,12 +897,14 @@
       return;
     }
 
-    const shuffled = names.map((name, index) => ({
-      uid: "local-" + index,
-      name,
-      alive: true,
-      role: "crew"
-    })).sort(() => Math.random() - 0.5);
+    const shuffled = names
+      .map((name, index) => ({
+        uid: "local-" + index,
+        name,
+        alive: true,
+        role: "crew"
+      }))
+      .sort(() => Math.random() - 0.5);
 
     shuffled[0].role = "saboteur";
 
@@ -690,10 +925,17 @@
     mode = "local";
 
     clearSubscriptions();
+
     setConnection("LOCAL PASS-AND-PLAY", false);
-    $("roomCodeDisplay").textContent = "LOCAL";
-    $("phaseBadge").textContent = "ROLE REVEAL";
-    $("lobbyTitle").textContent = "Pass the device";
+
+    const display = $("roomCodeDisplay");
+    const badge = $("phaseBadge");
+    const title = $("lobbyTitle");
+
+    if (display) display.textContent = "LOCAL";
+    if (badge) badge.textContent = "ROLE REVEAL";
+    if (title) title.textContent = "Pass the device";
+
     setScreen("lobby");
     hideNotice();
     renderLocal();
@@ -713,6 +955,7 @@
 
     if (localGame.phase === "reveal") {
       const player = localGame.players[localGame.revealIndex];
+
       $("phaseBadge").textContent = "ROLE REVEAL";
       $("lobbyTitle").textContent = "Pass the device";
 
@@ -726,9 +969,11 @@
         actionArea.innerHTML = `
           <p class="action-title">Pass the device to <strong>${escapeHTML(player.name)}</strong>. Make sure nobody else is looking, then reveal the role.</p>
           <button type="button" class="button button-primary" data-action="local-reveal">REVEAL MY ROLE</button>`;
+
         showRole(null);
       } else {
         showRole(player.role);
+
         actionArea.innerHTML = `
           <p class="action-title">Remember your role. Hide the screen before passing the device.</p>
           <button type="button" class="button button-primary" data-action="local-next-role">HIDE ROLE & NEXT PLAYER</button>`;
@@ -739,17 +984,21 @@
     } else if (localGame.phase === "discussion") {
       $("phaseBadge").textContent = "DISCUSSION";
       $("lobbyTitle").textContent = "Who can you trust?";
+
       showRole(null);
 
       actionArea.innerHTML = `
         <p class="action-title">Talk in person. Discuss suspicious behavior, then pass the device to start private voting.</p>
         <button type="button" class="button button-primary" data-action="local-voting">START VOTING</button>`;
-      $("lobbyHint").textContent = "The saboteur must blend in. The crew must identify them.";
+
+      $("lobbyHint").textContent =
+        "The saboteur must blend in. The crew must identify them.";
     } else if (localGame.phase === "voting") {
       const voter = alive[localVoteIndex];
 
       $("phaseBadge").textContent = "VOTING";
       $("lobbyTitle").textContent = "Cast your vote";
+
       showRole(null);
 
       if (!voter) {
@@ -777,11 +1026,13 @@
     } else if (localGame.phase === "results") {
       $("phaseBadge").textContent = "RESULTS";
       $("lobbyTitle").textContent = "The verdict";
+
       showRole(null);
 
       actionArea.innerHTML = `
         <p class="action-title">${escapeHTML(localGame.result)}</p>
         <button type="button" class="button button-primary" data-action="local-new-game">PLAY AGAIN</button>`;
+
       $("lobbyHint").textContent = "Start another round to reshuffle roles.";
     }
   }
@@ -794,12 +1045,20 @@
     });
 
     const maxVotes = Math.max(0, ...Object.values(tally));
-    const leaders = Object.keys(tally).filter((uid) => tally[uid] === maxVotes);
-    const eliminatedUid = maxVotes > 0 && leaders.length === 1 ? leaders[0] : null;
+    const leaders = Object.keys(tally).filter(
+      (uid) => tally[uid] === maxVotes
+    );
+
+    const eliminatedUid =
+      maxVotes > 0 && leaders.length === 1 ? leaders[0] : null;
+
     let message = "It's a tie. Nobody was eliminated.";
 
     if (eliminatedUid) {
-      const eliminated = localGame.players.find((p) => p.uid === eliminatedUid);
+      const eliminated = localGame.players.find(
+        (p) => p.uid === eliminatedUid
+      );
+
       eliminated.alive = false;
       message = eliminated.name + " was eliminated.";
 
@@ -818,16 +1077,14 @@
 
     if (saboteurAlive && survivors.length <= 2 && crewAlive <= 1) {
       message += " The saboteur has taken control. SABOTEUR WINS!";
-      localGame.phase = "results";
-      localGame.result = message;
     } else if (saboteurAlive) {
       message += " The saboteur is still out there.";
-      localGame.phase = "results";
-      localGame.result = message;
     } else {
-      localGame.phase = "results";
-      localGame.result = message + " Crew wins!";
+      message += " Crew wins!";
     }
+
+    localGame.phase = "results";
+    localGame.result = message;
 
     renderLocal();
   }
@@ -839,7 +1096,10 @@
   $("joinButton").addEventListener("click", joinOnlineRoom);
 
   $("roomCode").addEventListener("input", () => {
-    $("roomCode").value = $("roomCode").value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6);
+    $("roomCode").value = $("roomCode").value
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, "")
+      .slice(0, 6);
   });
 
   $("copyRoomButton").addEventListener("click", async () => {
@@ -855,6 +1115,7 @@
     if (mode === "online" && roomRef && currentUser) {
       try {
         const wasHost = isHost();
+
         await roomRef.child("players/" + currentUser.uid).remove();
 
         if (wasHost) {
@@ -868,6 +1129,7 @@
     }
 
     clearSubscriptions();
+
     mode = "none";
     roomCode = "";
     publicState = null;
@@ -876,6 +1138,7 @@
     myVote = "";
     hostRoleMap = {};
     localGame = null;
+
     showRole(null);
     setScreen("home");
     setConnection(configReady ? "READY TO CONNECT" : "LOCAL MODE READY", false);
@@ -884,6 +1147,7 @@
 
   actionArea.addEventListener("click", async (event) => {
     const button = event.target.closest("button");
+
     if (!button || button.disabled) return;
 
     const action = button.dataset.action;
@@ -922,6 +1186,7 @@
 
         if (action === "local-submit-vote") {
           const voter = localGame.players.filter((p) => p.alive)[localVoteIndex];
+
           if (voter && localVoteChoice) {
             localGame.votes[voter.uid] = localVoteChoice;
             localVoteIndex++;
@@ -936,18 +1201,20 @@
         }
       }
     } catch (error) {
-      console.error(error);
+      console.error("Game action error:", error);
       showNotice("That action failed. Check the connection and try again.", true);
     }
   });
 
   actionArea.addEventListener("click", (event) => {
     const button = event.target.closest("[data-vote-target]");
+
     if (button && mode === "online") {
       castVote(button.dataset.voteTarget);
     }
 
     const localButton = event.target.closest("[data-local-vote]");
+
     if (localButton && mode === "local") {
       localVoteChoice = localButton.dataset.localVote;
       renderLocal();
