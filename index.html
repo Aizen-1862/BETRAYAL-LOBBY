@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,11 +62,22 @@
   </main>
 
   <section id="roomPanel" class="room-panel hidden">
+    <button
+      id="roomCloseBtn"
+      class="room-close"
+      type="button"
+      aria-label="Close room panel"
+      title="Close room panel"
+      onclick="document.getElementById('roomPanel').classList.remove('room-open')"
+    >×</button>
+
     <div class="room-label">PRIVATE ROOM</div>
+
     <div class="room-code-row">
       <strong id="roomCode">---</strong>
       <button id="copyBtn" class="small-btn">COPY CODE</button>
     </div>
+
     <div id="roomStatus">Connecting...</div>
     <div id="playerCount">Players: 1 / 8</div>
 
@@ -87,6 +98,23 @@
     <button id="startRoundBtn" class="secondary-btn hidden">START ROUND</button>
     <button id="leaveBtn" class="small-btn">LEAVE ROOM</button>
   </section>
+
+  <!-- Tiny mobile-only room widget -->
+  <button
+    id="roomToggleBtn"
+    class="room-toggle"
+    type="button"
+    aria-label="Show room code and room controls"
+    aria-controls="roomPanel"
+    aria-expanded="false"
+    onclick="
+      const panel = document.getElementById('roomPanel');
+      const isOpen = panel.classList.toggle('room-open');
+      this.setAttribute('aria-expanded', String(isOpen));
+    "
+  >
+    <span class="room-toggle-dot"></span> ROOM
+  </button>
 
   <section id="hud" class="hidden">
     <div class="hud-left">
@@ -133,3 +161,4 @@
   <script src="script.js"></script>
 </body>
 </html>
+```
