@@ -3,7 +3,7 @@
 
 :root {
   --bg: #10152d;
-  --panel: rgba(20, 27, 54, .95);
+  --panel: rgba(20, 27, 54, .94);
   --white: #fff;
   --muted: #a9b4d5;
   --cyan: #55f1f3;
@@ -26,18 +26,13 @@ html, body {
   background: var(--bg);
 }
 
-button, input, select { font: inherit; }
+button, input { font: inherit; }
 
 button {
   cursor: pointer;
   color: white;
   border: 0;
   touch-action: manipulation;
-}
-
-button:focus-visible, select:focus-visible, input:focus-visible {
-  outline: 2px solid var(--cyan);
-  outline-offset: 3px;
 }
 
 #scene {
@@ -140,14 +135,14 @@ h1 span {
   color: #d1d9f4;
   font-size: 15px;
   line-height: 1.7;
-  margin: 0 0 18px;
+  margin: 0 0 22px;
 }
 
 .feature-row {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .feature-row span {
@@ -186,51 +181,8 @@ h1 span {
   filter: brightness(1.08);
 }
 
-.map-picker {
-  max-width: 390px;
-  margin: 0 0 15px;
-  padding: 14px;
-  border: 1px solid rgba(85,241,243,.22);
-  border-radius: 12px;
-  background: rgba(15,23,48,.78);
-  backdrop-filter: blur(12px);
-}
-
-.map-picker label, .room-map-label {
-  display: block;
-  color: var(--cyan);
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: 1.5px;
-  margin-bottom: 9px;
-}
-
-.map-picker select, .room-map-select {
-  width: 100%;
-  min-height: 42px;
-  padding: 0 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,.17);
-  color: white;
-  background: #1a2346;
-  outline: none;
-  font-size: 12px;
-}
-
-.map-picker select option, .room-map-select option {
-  color: white;
-  background: #1a2346;
-}
-
-#mapDescription, .map-description-small {
-  margin-top: 8px;
-  color: var(--muted);
-  font-size: 10px;
-  line-height: 1.5;
-}
-
 .room-box {
-  margin-top: 19px;
+  margin-top: 27px;
   max-width: 390px;
   padding: 19px;
   border: 1px solid rgba(255,255,255,.13);
@@ -315,9 +267,7 @@ h1 span {
   z-index: 6;
   top: 84px;
   left: 18px;
-  width: min(290px, calc(100% - 36px));
-  max-height: calc(100% - 100px);
-  overflow-y: auto;
+  width: min(280px, calc(100% - 36px));
   padding: 16px;
   border: 1px solid rgba(255,255,255,.2);
   border-radius: 14px;
@@ -354,8 +304,6 @@ h1 span {
   overflow-wrap: anywhere;
 }
 
-.room-map-label { margin-top: 14px; }
-.room-map-select { font-size: 11px; }
 .room-panel .secondary-btn { margin-top: 10px; }
 .room-panel .small-btn { min-height: 33px; margin-top: 7px; }
 
@@ -404,7 +352,6 @@ h1 span {
   font-size: 10px;
   font-weight: 900;
   letter-spacing: 1px;
-  max-width: 38vw;
 }
 
 #exitBtn { pointer-events: auto; min-height: 38px; }
@@ -456,7 +403,6 @@ h1 span {
   color: rgba(255,255,255,.7);
   font-size: 9px;
   font-weight: 800;
-  pointer-events: none;
 }
 
 .move-pad {
@@ -563,40 +509,101 @@ h1 span {
 
   .screen {
     align-items: flex-start;
-    padding: 75px 16px 24px;
-    background: linear-gradient(90deg, rgba(9,14,35,.96), rgba(9,14,35,.76));
+    padding: 80px 20px 24px;
+    background: linear-gradient(90deg, rgba(9,14,35,.94), rgba(9,14,35,.67));
   }
 
   .hero { margin: auto 0; }
-  h1 { font-size: clamp(39px, 11vw, 59px); letter-spacing: -2.8px; }
-  .eyebrow { font-size: 9px; letter-spacing: 2px; margin-bottom: 12px; }
-  .hero > p { font-size: 13px; margin-bottom: 14px; }
-  .feature-row { gap: 5px; margin-bottom: 14px; }
-  .feature-row span { padding: 7px; font-size: 8px; }
-  .map-picker { padding: 11px; margin-bottom: 12px; }
-  .map-picker select { min-height: 39px; }
-  .room-box { padding: 13px; margin-top: 15px; }
-  .room-box h2 { margin-bottom: 10px; }
-  .decoration { width: 100px; height: 100px; right: -15px; top: 24%; }
-  .decoration-two { right: 30px; top: 36%; width: 65px; height: 65px; }
+  h1 { font-size: clamp(43px, 12vw, 65px); letter-spacing: -2.8px; }
+  .hero > p { font-size: 13px; }
+  .room-box { padding: 14px; margin-top: 18px; }
+  .decoration { width: 120px; height: 120px; right: -15px; top: 24%; }
+  .decoration-two { right: 30px; top: 36%; width: 75px; height: 75px; }
 
-  #hud { top: 68px; left: 8px; right: 8px; gap: 5px; }
+  #hud {
+    top: 68px;
+    left: 10px;
+    right: 10px;
+    gap: 5px;
+  }
+
   .hud-left { gap: 5px; }
-  .hud-card { min-width: 65px; padding: 7px; }
-  .hud-card small { font-size: 6px; letter-spacing: .4px; }
-  .hud-card strong { font-size: 10px; }
-  #roundMessage { max-width: 33vw; padding: 9px 6px; font-size: 7px; line-height: 1.4; letter-spacing: .4px; }
-  #exitBtn { min-height: 31px; padding: 0 7px; font-size: 9px; }
-  .room-panel { top: 68px; left: 8px; width: 218px; max-height: calc(100% - 80px); padding: 11px; }
-  .move-pad { left: 12px; bottom: 18px; }
-  .jump-btn { right: 16px; bottom: 30px; }
-  .mobile-tip { right: 12px; bottom: 125px; font-size: 8px; }
+  .hud-card { min-width: 72px; padding: 8px; }
+  .hud-card small { font-size: 7px; }
+  .hud-card strong { font-size: 11px; }
+  #roundMessage { max-width: 125px; padding: 9px 7px; font-size: 8px; line-height: 1.4; }
+  #exitBtn { min-height: 33px; padding: 0 8px; }
+
+  /* MOBILE ROOM PANEL FIX */
+  .room-panel {
+    top: 118px;
+    left: 10px;
+    width: min(190px, calc(100% - 20px));
+    padding: 9px 10px;
+    border-radius: 11px;
+    background: rgba(13, 19, 43, .82);
+    backdrop-filter: blur(8px);
+  }
+
+  .room-label {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+
+  .room-code-row {
+    gap: 5px;
+    margin: 5px 0;
+  }
+
+  #roomCode { font-size: 10px; }
+
+  .room-panel .small-btn {
+    min-height: 27px;
+    margin-top: 3px;
+    padding: 0 7px;
+    font-size: 8px;
+  }
+
+  #roomStatus, #playerCount {
+    font-size: 9px;
+    margin: 4px 0;
+    line-height: 1.25;
+  }
+
+  .room-panel .secondary-btn {
+    min-height: 33px;
+    margin-top: 5px;
+    padding: 0 8px;
+    font-size: 9px;
+  }
+
+  /* Keep movement controls above the game canvas but clear of the room panel */
+  #mobileControls { z-index: 5; }
+  .move-pad {
+    left: 12px;
+    bottom: max(18px, env(safe-area-inset-bottom));
+    width: 140px;
+  }
+
+  .jump-btn {
+    right: 14px;
+    bottom: max(25px, env(safe-area-inset-bottom));
+    width: 68px;
+    height: 68px;
+  }
+
+  .mobile-tip { bottom: 115px; right: 14px; }
 }
 
-@media (max-height: 700px) {
-  .screen { padding-top: 68px; padding-bottom: 18px; }
-  .hero > p { margin-bottom: 10px; }
-  .feature-row { margin-bottom: 10px; }
-  .map-picker { padding: 10px; }
-  .room-box { margin-top: 12px; padding: 12px; }
+/* Short phone screens */
+@media (max-width: 650px) and (max-height: 700px) {
+  .room-panel {
+    top: 108px;
+    width: 170px;
+    padding: 7px 8px;
+  }
+
+  #roomStatus { max-height: 28px; overflow: hidden; }
+  .room-panel .secondary-btn { min-height: 29px; }
+  .room-panel .small-btn { min-height: 25px; }
 }
