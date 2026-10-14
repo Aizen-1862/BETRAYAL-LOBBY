@@ -1,9 +1,144 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#07131b"><title>LAST ISLAND — Survive Together</title><link rel="stylesheet" href="style.css"></head>
-<body><main class="app"><header class="top"><a class="brand" href="#"><span class="logo">LI</span> LAST<span class="mint">.</span>ISLAND</a><span class="status"><i id="statusDot"></i><b id="connectionStatus">READY TO CONNECT</b></span></header>
-<section class="hero"><p class="eyebrow">MULTIPLAYER SURVIVAL EXPEDITION</p><h1>ONE ISLAND.<br><span>NO GUARANTEES.</span></h1><p>Explore the wild. Build your stash. Form alliances. Survive your friends.</p><div class="tags"><span>🌴 OPEN EXPLORATION</span><span>⚔️ PLAYER COMBAT</span><span>🤝 ALLIANCES</span></div></section>
-<div id="notice" class="notice hidden"></div>
-<section id="homeScreen" class="panel"><p class="eyebrow">EXPEDITION CONTROL</p><h2>Choose your landing point.</h2><label for="playerName">SURVIVOR NAME</label><input id="playerName" maxlength="18" placeholder="Enter your name" autocomplete="nickname"><div class="choices"><button id="createButton" class="choice"><span class="big">◎</span><b>CREATE PRIVATE ROOM</b><small>Start an island with your friends</small></button><button id="localButton" class="choice"><span class="big">⌁</span><b>LOCAL PRACTICE</b><small>Learn the island survival basics</small></button></div><div class="join"><input id="roomCode" maxlength="6" placeholder="ROOM CODE" aria-label="Room code"><button id="joinButton" class="secondary">JOIN ↗</button></div><p class="fine">Private online rooms support 2–8 players. Share the six-character room code with friends.</p></section>
-<section id="lobbyScreen" class="panel hidden"><div class="panel-head"><div><p class="eyebrow">SURVIVAL SESSION</p><h2 id="lobbyTitle">Waiting for survivors</h2></div><span id="phaseBadge" class="badge">LOBBY</span></div><div class="roomcode"><div><label>ROOM CODE · SHARE WITH FRIENDS</label><strong id="roomCodeDisplay">------</strong></div><button id="copyRoomButton" class="secondary">COPY</button></div><div class="players-head"><label>SURVIVORS</label><span id="playerCount">0 / 8</span></div><div id="playerList" class="players"></div><div id="roleBox" class="role hidden"><h3 id="roleTitle"></h3><p id="roleDescription"></p></div><div id="actionArea" class="actions"></div><div id="gameArea" class="game hidden"></div><p id="lobbyHint" class="fine">Waiting for the host to launch the expedition.</p><button id="leaveButton" class="ghost">← LEAVE SESSION</button></section>
-<section class="rules"><p class="eyebrow">HOW TO SURVIVE</p><div class="rulegrid"><article><b>01 · SCAVENGE</b><p>Explore nearby tiles and collect food, wood, stone, and supply crates.</p></article><article><b>02 · MAKE YOUR MOVE</b><p>Make alliances, trade messages, craft shields, or take a risk.</p></article><article><b>03 · OUTLAST THEM</b><p>Watch your health and hunger. Fight, flee, or work together.</p></article></div></section><footer>LAST ISLAND © 2026 <span>THE TIDE ALWAYS TURNS.</span></footer></main>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script><script src="script.js"></script></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="theme-color" content="#07131b">
+  <title>LAST ISLAND — 3D Survival</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="app">
+
+  <header class="top">
+    <a class="brand" href="#">
+      <span class="logo">LI</span>
+      LAST<span class="mint">.</span>ISLAND
+      <small>3D SURVIVAL</small>
+    </a>
+    <span class="status">
+      <i id="statusDot"></i>
+      <b id="connectionStatus">READY TO CONNECT</b>
+    </span>
+  </header>
+
+  <section class="hero">
+    <p class="eyebrow">MULTIPLAYER SURVIVAL EXPEDITION</p>
+    <h1>THE ISLAND<br><span>IS YOURS TO SURVIVE.</span></h1>
+    <p>Run through the jungle. Scavenge supplies. Trust nobody too quickly.</p>
+    <div class="tags">
+      <span>🌴 3D EXPLORATION</span>
+      <span>⚔️ SURVIVAL COMBAT</span>
+      <span>🤝 ALLIANCES</span>
+    </div>
+  </section>
+
+  <div id="notice" class="notice hidden"></div>
+
+  <section id="homeScreen" class="panel">
+    <p class="eyebrow">EXPEDITION CONTROL</p>
+    <h2>Choose your landing point.</h2>
+
+    <label for="playerName">SURVIVOR NAME</label>
+    <input id="playerName" maxlength="18" placeholder="Enter your name" autocomplete="nickname">
+
+    <div class="choices">
+      <button id="createButton" class="choice">
+        <span class="big">◎</span>
+        <b>CREATE PRIVATE ROOM</b>
+        <small>Start an island with your friends</small>
+      </button>
+
+      <button id="localButton" class="choice">
+        <span class="big">⌁</span>
+        <b>3D PRACTICE MODE</b>
+        <small>Explore the island in third person</small>
+      </button>
+    </div>
+
+    <div class="join">
+      <input id="roomCode" maxlength="6" placeholder="ROOM CODE" aria-label="Room code">
+      <button id="joinButton" class="secondary">JOIN ↗</button>
+    </div>
+
+    <p class="fine">
+      Private online rooms support 2–8 players.
+      Share the six-character room code with friends.
+    </p>
+  </section>
+
+  <section id="lobbyScreen" class="panel hidden">
+    <div class="panel-head">
+      <div>
+        <p class="eyebrow">SURVIVAL SESSION</p>
+        <h2 id="lobbyTitle">Waiting for survivors</h2>
+      </div>
+      <span id="phaseBadge" class="badge">LOBBY</span>
+    </div>
+
+    <div class="roomcode">
+      <div>
+        <label>ROOM CODE · SHARE WITH FRIENDS</label>
+        <strong id="roomCodeDisplay">------</strong>
+      </div>
+      <button id="copyRoomButton" class="secondary">COPY</button>
+    </div>
+
+    <div class="players-head">
+      <label>SURVIVORS</label>
+      <span id="playerCount">0 / 8</span>
+    </div>
+
+    <div id="playerList" class="players"></div>
+
+    <div id="roleBox" class="role hidden">
+      <h3 id="roleTitle"></h3>
+      <p id="roleDescription"></p>
+    </div>
+
+    <div id="actionArea" class="actions"></div>
+    <div id="gameArea" class="game hidden"></div>
+
+    <p id="lobbyHint" class="fine">
+      Waiting for the host to launch the expedition.
+    </p>
+
+    <button id="leaveButton" class="ghost">← LEAVE SESSION</button>
+  </section>
+
+  <section class="rules">
+    <p class="eyebrow">HOW TO SURVIVE</p>
+
+    <div class="rulegrid">
+      <article>
+        <b>01 · EXPLORE</b>
+        <p>Explore a 3D island with trees, rocks, beaches, and supply drops.</p>
+      </article>
+
+      <article>
+        <b>02 · GEAR UP</b>
+        <p>Collect resources, manage hunger, craft a shield, and form alliances.</p>
+      </article>
+
+      <article>
+        <b>03 · OUTLAST THEM</b>
+        <p>Fight nearby rivals, avoid the storm, and be the last survivor.</p>
+      </article>
+    </div>
+  </section>
+
+  <footer>
+    LAST ISLAND © 2026
+    <span>THE TIDE ALWAYS TURNS.</span>
+  </footer>
+
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
